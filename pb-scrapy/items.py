@@ -5,6 +5,9 @@
 
 from scrapy import Item, Field
 
+def serialize_content(value):
+    return value.decode()
+
 class PasteItem(Item):
     scrape_url = Field()
     full_url = Field()
@@ -16,4 +19,4 @@ class PasteItem(Item):
     syntax = Field()
     user = Field()
     hits = Field()
-    content = Field()
+    content = Field(serializer=serialize_content)

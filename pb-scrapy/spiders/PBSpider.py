@@ -14,8 +14,8 @@ class PBSpider(scrapy.Spider):
         recent_paste_list = json.loads(response.body)
         for paste in recent_paste_list:
             yield Request(url=paste['scrape_url'], callback=self.parse_paste_contents, meta={'paste_item': paste})
-            break
 
     def parse_paste_contents(self, response):
         paste_item = items.PasteItem(response.meta.get('paste_item'))
         paste_item['content'] = response.body
+        yield paste_item
