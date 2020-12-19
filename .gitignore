@@ -1,4 +1,8 @@
 .scrapy/*
+.vscode/*
 *.db
 *.log
 *.pyc
+./pb-scrapy/.env
+./envs/.env
+.env

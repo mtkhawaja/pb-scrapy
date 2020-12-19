@@ -7,17 +7,19 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'pb-scrapy'
+from decouple import config
 
+BOT_NAME = 'pb-scrapy'
 SPIDER_MODULES = ['pb-scrapy.spiders']
 NEWSPIDER_MODULE = 'pb-scrapy.spiders'
 
+RECENT_PASTES_ENDPOINT = config('PASTEBIN_RECENT_PASTES_ENDPOINT')
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'tutorial (+http://www.yourdomain.com)'
+USER_AGENT = config('USER_AGENT', default='proj (+http://www.yourdomain.com)')
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = config('ROBOTSTXT_OBEY', default=True, cast=bool)
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32

@@ -1,23 +1,21 @@
-"""
-Scrape some sort of website...
-"""
-
-import scrapy
+import scrapy, json
+from scrapy import Request
+from .. import settings, items
 
 class PBSpider(scrapy.Spider):
     name = "PBSpider"
 
     def start_requests(self):
-        urls = [
-            'http://quotes.toscrape.com/page/1/',
-            'http://quotes.toscrape.com/page/2/',
-        ]
+        urls = [settings.RECENT_PASTES_ENDPOINT]
         for url in urls:
-            yield scrapy.Request(url=url, callback=self.parse)
+            yield Request(url=url, callback=self.parse_paste_list)
 
-    def parse(self, response):
-        page = response.url.split("/")[-2]
-        filename = f'quotes-{page}.html'
-        with open(filename, 'wb') as f:
-            f.write(response.body)
-        self.log(f'Saved file {filename}')
+    def parse_paste_list(self, response):
+        recent_paste_list = json.loads(response.body)
+        for paste in recent_paste_list:
+            yield Request(url=paste['scrape_url'], callback=self.parse_paste_contents, meta={'paste_item': paste})
+            break
+
+    def parse_paste_contents(self, response):
+        paste_item = items.PasteItem(response.meta.get('paste_item'))
+        paste_item['content'] = response.body
