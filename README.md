@@ -26,7 +26,7 @@ pip install -r requirements.txt
 ## Run
 
 ```bash
-scrapy crawl pb
+scrapy crawl PBSpider
 ```
 
 ## Acknowledgements
